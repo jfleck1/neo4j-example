@@ -1,0 +1,60 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+    id 'com.palantir.docker' version '0.28.0'
+    id "com.palantir.docker-run" version "0.28.0"
+}
+
+group = 'com.github.jfleck1'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    // Spring
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // Swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// Resource filtering to inject metadata such as name and version
+import org.apache.tools.ant.filters.*
+processResources {
+    filter ReplaceTokens, tokens: [
+        name: project.name,
+        group: project.group,
+        version: project.version,
+        builtOn: (new Date()).format('yyyy-MM-dd\'T\'HH:mm:ss.SSSZ')
+    ]
+}
+
+docker {
+    name project.name.toString()
+    dockerfile file('Dockerfile')
+    tag 'latest', project.version.toString()
+    files bootJar.archiveFile
+    buildArgs([
+        NAME: project.name.toString(),
+        VERSION: project.version.toString()
+    ])
+}
+
+dockerRun {
+    name project.name
+    image project.name
+    ports '8080:8080'
+    daemonize true
+}

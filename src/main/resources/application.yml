@@ -1,0 +1,13 @@
+
+spring:
+  profiles:
+    include:
+      - metadata
+  data:
+    rest:
+      base-path: "/resources"
+  neo4j:
+    uri: "bolt://localhost:7687"
+    authentication:
+      username: "neo4j"
+      password: "secret"
