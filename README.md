@@ -15,6 +15,8 @@ To build this project from source, simply run the gradle wrapper command;
 
 ## Running
 
+To run this project, choose either the Docker Compose method or the simple Docker method. 
+
 ### Docker Compose
 Use Docker Compose to start both this container and the Neo4j database container. A `docker-compose.yml` file is located
 in this directory which includes all the necessary configurations and will use the `./conf` and `./data` for
@@ -31,6 +33,8 @@ Stop it by using;
 ```
 docker-compose down -v
 ```
+
+Browse to http://localhost:8080 to view the project's main site.
 
 Note: You can start with a blank neo4j database by simply removing the `./data` directory and restarting the
 composition.
@@ -49,4 +53,4 @@ Then you can run this project's container with;
 ```
 ./gradlew dockerRun
 ```
-
+Browse to http://localhost:8080 to view the project's main site.
